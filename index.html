@@ -452,12 +452,16 @@
 				});
 			});
 			
+			
 			var svg = d3.select("#svg")
-			.attr("width", "100%")
+			.attr("width", 900)
+			.attr("display", "inline-block");
+			
 			var svg2 = d3.select("body").append("svg")
 			.attr("id", "data")
 			.attr("width", 300)
-			.attr("height", 200);
+			.attr("height", 400)
+			.attr("display", "inline-block");
 			
 			var baseX = 20;
 			var baseY = 20;
@@ -473,12 +477,26 @@
 			.attr("y", baseY+25)
 			.attr("font-size", 20);
 			
-			svg2.append("text")
-			.attr("id", "cause")
-			.attr("x", baseX)
-			.attr("y", baseY+50)
-			.attr("font-size", 20);
+			for(var i=0;i<=16; i++){
+				svg2.append("rect")
+				.attr("id", "cause"+ i)
+				.attr("x", baseX)
+				.attr("y", baseY+30+i*15)
+				.attr("height",13)
+				.attr("width",0)
+				.attr("fill", "red")
+				.style("transition","width 0.5s");
+				
+				svg2.append("text")
+				.attr("id", "causeLabel"+ i)
+				.attr("x", baseX)
+				.attr("y", baseY + 41 + i*15)
+				.attr("font-size", 12)
+				.style("transition", "x 0.5s")
+				.text("");
+			}
 			
+			var barScale = d3.scaleLinear().domain([0,0.3]).range([0,180]);
 			
 			function handleMouseEvents(data1,data2){
 				svg.selectAll("path")
@@ -491,35 +509,46 @@
 					.text(function(){
 						for(var i=0; i< data1.length; i++){
 							if(data1[i]["State"] == state.attr("data-name")){
-								return "Life Expectancy: " + data1[i]["Age"];
+								return "Life Expectancy: " + data1[i]["Age"] + " years";
 							}
 						}
 					});
 					var simplifyDeaths = function(){
-						deaths = [];
+						var deaths = [];
 						for(var i=0;i<data2.length; i++){
 							if(data2[i]["State"] == state.attr("data-name")){
 								deaths.push([data2[i]["Cause Name"],parseInt(data2[i]["Deaths"])]);
 							}
 						}
-						deathsTot = [];
+						var deathsTot = [];
 						for(var i=0; i<=16; i++){
 							deathsTot.push([deaths[i][0],0])
 						}
-						count = 0;
+						var count = 0;
 						while(count < deaths.length){
 							for(var i=0; i<deathsTot.length; i++){
 								deathsTot[i][1] += deaths[count][1];
 								count+=1;
 							}
 						}
-						causeTotal = deathsTot[1][1];
-						for(var i=0; i<deathsTot.length; i++){
-							deathsTot[i][1] = (deathsTot[i][1]/causeTotal).toFixed(3);
-						}
+						
 						return deathsTot;
 					};
-					console.log(simplifyDeaths());
+					var deathsTot = simplifyDeaths()
+					causeTotal = deathsTot[1][1];
+					for(var i=0; i<deathsTot.length; i++){
+						if(isNaN(deathsTot[i][1])){deathsTot[i][1]=0;}
+						deathsTot[i][1] = deathsTot[i][1]/causeTotal;
+						if(deathsTot[i][0]!="All Causes"){
+						d3.select("#cause"+i)
+						.attr("width", barScale(deathsTot[i][1]));
+						d3.select("#causeLabel"+i)
+						.attr("x", baseX+barScale(deathsTot[i][1])+3)
+						.text(deathsTot[i][0] + ": " + (deathsTot[i][1]*100).toFixed(2) + "%")
+						.transition()
+						.duration(500);
+						}
+					}
 				})
 				.on("mouseout", function(d){
 					d3.select(this).style("fill", "#f9f9f9");
