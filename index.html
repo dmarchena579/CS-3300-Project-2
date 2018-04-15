@@ -1,10 +1,38 @@
 <html>
 	<head>
 		<title>How will you die?</title>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Creepster" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Alegreya" rel="stylesheet">
 		<script src="https://d3js.org/d3.v4.min.js"></script>
 		<script src="https://d3js.org/topojson.v2.min.js"></script>
+    <style>
+    body { 
+      background: #222;
+      color: #aaa;
+      font-family: 'Creepster', cursive;
+    }
+    /*button { 
+      background-color: #444; color: #ffcc00; font-family: "Allegreya"; font-size: 16px; border: none; margin: 10px;
+    }*/
+    line { stroke: #aaa; }
+    path.tile {
+      fill: none;
+      stroke: #555;
+      stroke-width: 3;
+    }
+    svg{
+
+    } 
+    text { fill: #aaa; text-anchor: left; font-family: "Alegreya"; }
+</style>
 
 	</head>
+  <h1 style = "color:#A93226; text-align: center; font-size: 70"> How Will You Die??? </h1>
+  <h2 style = "color:#A93226; text-align: left; font-size: 30; padding-left: 100; font-family: Alegreya"> What state are you from? </h2>
+
+
 	<body>
 		<svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -459,7 +487,7 @@
 			
 			var svg2 = d3.select("body").append("svg")
 			.attr("id", "data")
-			.attr("width", 300)
+			.attr("width", 350)
 			.attr("height", 400)
 			.attr("display", "inline-block");
 			
@@ -469,7 +497,7 @@
 			.attr("id", "stateName")
 			.attr("x", baseX)
 			.attr("y", baseY)
-			.attr("font-size", 20);
+			.attr("font-size", 30);
 			
 			svg2.append("text")
 			.attr("id", "expectancy")
