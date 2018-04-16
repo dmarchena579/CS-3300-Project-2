@@ -18,7 +18,7 @@
       backdrop-filter: blur(10);
     }
     /*button { 
-      background-color: #444; color: #ffcc00; font-family: "Allegreya"; font-size: 16px; border: none; margin: 10px;
+      background-color: #444; color: #ffcc00; font-family: "Alegreya"; font-size: 16px; border: none; margin: 10px;
     }*/
     line { stroke: #aaa; }
     path.tile {
@@ -485,8 +485,9 @@
 			
 			
 			var svg = d3.select("#svg")
-			.attr("width", 900)
-			.attr("display", "inline-block");
+			.style("width","100%")
+			.style("max-width", "900px")
+			.style("display", "inline-block");
 			
 			var svg2 = d3.select("body").append("svg")
 			.attr("id", "data")
@@ -523,8 +524,6 @@
 				.attr("x", baseX)
 				.attr("y", baseY + 41 + i*15)
 				.attr("font-size", 12)
-				.style("transition", "x 0.5s")
-				.text("");
 			}
 			
 			var barScale = d3.scaleLinear().domain([0,0.3]).range([0,180]);
@@ -533,7 +532,8 @@
 				svg.selectAll("path")
 				.on("mouseover", function(d){
 					state = d3.select(this);
-					state.style("fill", "#A93226");
+					state.style("fill", "#A93226")
+					.style("transition","fill 0.3s");
 					d3.select("#stateName")
 					.text(state.attr("data-name"));
 					d3.select("#expectancy")
@@ -585,10 +585,11 @@
 						d3.select("#cause"+i)
 							.attr("width", barScale(deathsTot[i][1]));	
 						d3.select("#causeLabel"+i)
-							.attr("x", baseX+barScale(deathsTot[i][1])+3)
-							.text(deathsTot[i][0] + ": " + (deathsTot[i][1]*100).toFixed(2) + "%")
 							.transition()
-							.duration(500);
+							.duration(300)
+							.attr("x", baseX+barScale(deathsTot[i][1])+3)
+							.text(deathsTot[i] [0] + ": " + (deathsTot[i][1]*100).toFixed(2) + "%");
+							
 						
 						
 					}
