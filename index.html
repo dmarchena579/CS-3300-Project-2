@@ -567,14 +567,21 @@
 						if(isNaN(deathsTot[i][1])){deathsTot[i][1]=0;}
 						deathsTot[i][1] = deathsTot[i][1]/causeTotal;
 						if(deathsTot[i][0]!="All Causes"){
-						d3.select("#cause"+i)
-						.attr("width", barScale(deathsTot[i][1]));
-						d3.select("#causeLabel"+i)
-						.attr("x", baseX+barScale(deathsTot[i][1])+3)
-						.text(deathsTot[i][0] + ": " + (deathsTot[i][1]*100).toFixed(2) + "%")
-						.transition()
-						.duration(500);
+							
+							d3.select("#cause"+i)
+							.attr("width", barScale(deathsTot[i][1]));
+							
+							d3.select("#causeLabel"+i)
+							.attr("x", baseX+barScale(deathsTot[i][1])+3)
+							.text(deathsTot[i][0] + ": " + (deathsTot[i][1]*100).toFixed(2) + "%")
+							.transition()
+							.duration(500);
 						}
+						else{
+							d3.select("#cause" + i)
+							.attr("height", 0);
+						}
+						
 					}
 				})
 				.on("mouseout", function(d){
