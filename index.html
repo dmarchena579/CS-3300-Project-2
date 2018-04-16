@@ -33,7 +33,6 @@
 	</head>
   <!-- <img src="img.gif" alt="bulb" align="middle"> -->
   <h1 style = "color:#A93226; text-align: center; font-size: 70"> How Will You Die??? </h1>
-  <h2 style = "color:#A93226; text-align: left; font-size: 30; padding-left: 100; font-family: Alegreya"> What state are you from? </h2>
 
 
 	<body>
@@ -479,7 +478,13 @@
 					lifeExpectancy = data1;
 					deathCauses = data2;
 					
-					svg.selectAll("path")
+					colorFill(data1);
+					handleMouseEvents(lifeExpectancy,deathCauses);
+				});
+			});
+			
+			function colorFill(data1){
+				svg.selectAll("path")
 					.style("fill", function(d){
 						for(var i=0; i<data1.length; i++){
 							if(data1[i]["State"]==d3.select(this).attr("data-name")){
@@ -487,11 +492,7 @@
 							}
 					}
 					});
-					handleMouseEvents(lifeExpectancy,deathCauses);
-				});
-			});
-			
-			
+			}
 			var svg = d3.select("#svg")
 			.style("width","100%")
 			.style("max-width", "900px")
@@ -508,7 +509,7 @@
 			var svg2 = d3.select("body").append("svg")
 			.attr("id", "data")
 			.attr("width", 350)
-			.attr("height", 300)
+			.attr("height", 400)
 			.attr("display", "inline-block");
 			
 			var baseX = 20;
@@ -547,20 +548,17 @@
 			function handleMouseEvents(data1,data2){
 			
 				var form = d3.select("body")
-				.append("form");
-
-				form.append("text")
-				.attr("x", baseX)
-				.attr("y", baseY)
-				.attr("font-size", 20)
-				.text("How will you die?");
+				.insert("form", "svg");
+				
+				form
+				.style("text-align", "center");
 
 				form.append("br");
 
 				form.append("text")
 				.attr("x", baseX)
 				.attr("y", baseY + 25)
-				.attr("font-size", 20)
+				.style("font-size", 20)
 				.text("I am currently a ");
 
 				form.append("input")
@@ -571,7 +569,7 @@
 				form.append("text")
 				.attr("x", baseX)
 				.attr("y", baseY + 25)
-				.attr("font-size", 20)
+				.style("font-size", 20)
 				.text(" year old living in ");
 
 				var select = form.append("select")
@@ -595,6 +593,7 @@
 				.text("Submit");
 
 				button.on("click", function() {
+					colorFill(data1);
 					var inputAge = document.getElementById("myAge").value;
 					var inputState = document.getElementById("myState").value;
 					
@@ -614,6 +613,8 @@
 				
 				//svg.selectAll("path")
 				//.on("mouseover", function(d){
+				
+				
 					state = selectedState;
 					currFill = state.style("fill");
 					state.style("fill", d3.hsl(0,1,0.3))
@@ -624,7 +625,8 @@
 					.text(function(){
 						for(var i=0; i< data1.length; i++){
 							if(data1[i]["State"] == state.attr("data-name")){
-								return "Life Expectancy: " + data1[i]["Age"] + " years";
+								var date = new Date();
+								return "You will die in " + (date.getFullYear() + parseInt(data1[i]["Age"]) - inputAge);
 							}
 						}
 					});
