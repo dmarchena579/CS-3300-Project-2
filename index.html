@@ -490,6 +490,7 @@
 					}
 				})
 					handleMouseEvents(lifeExpectancy,deathCauses);
+          survey(lifeExpectancy,deathCauses);
 				});
 			});
 			
@@ -614,6 +615,63 @@
 					d3.select(this).style("fill", "rgb(230,230,230)");
 				});
 			}
+
+      function survey(data1, data2){
+
+        var form = d3.select("body")
+        .append("form");
+
+        form.append("text")
+        .attr("x", baseX)
+        .attr("y", baseY)
+        .attr("font-size", 20)
+        .text("How will you die?");
+
+        form.append("br");
+
+        form.append("text")
+        .attr("x", baseX)
+        .attr("y", baseY + 25)
+        .attr("font-size", 20)
+        .text("I am currently a ");
+
+        form.append("input")
+        .attr("id", "myAge")
+        .attr("type", "text")
+        .attr("name", "age");
+
+        form.append("text")
+        .attr("x", baseX)
+        .attr("y", baseY + 25)
+        .attr("font-size", 20)
+        .text(" year old living in ");
+
+        var select = form.append("select")
+        .attr("id", "myState")
+        .attr("name", "state");
+
+          select.selectAll("option")
+          .data(data1)
+          .enter()
+          .append("option")
+          .attr("value", function(d){
+            return d["State"];
+          })
+          .text(function(d){
+            return d["State"];
+          });
+
+        var button = form.append("button")
+        .attr("type", "button")
+        .attr("id", "submit")
+        .text("Submit");
+
+        button.on("click", function() {
+          var inputAge = document.getElementById("myAge").value;
+          var inputState = document.getElementById("myState").value;
+          console.log(inputAge+inputState);
+        })
+      }
 			
 		</script>
 	</body>
