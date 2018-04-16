@@ -479,6 +479,16 @@
 					lifeExpectancy = data1;
 					deathCauses = data2;
 					
+					svg.selectAll("path")
+					.style("fill", "#A93226")
+					.style("opacity", function(d){
+						for(var i=0; i<data1.length; i++){
+							if(data1[i]["State"]==d3.select(this).attr("data-name")){
+								console.log(opacScale(data1[i]["Age"]));
+								return opacScale(data1[i]["Age"]);
+							}
+					}
+				})
 					handleMouseEvents(lifeExpectancy,deathCauses);
 				});
 			});
@@ -487,7 +497,15 @@
 			var svg = d3.select("#svg")
 			.style("width","100%")
 			.style("max-width", "900px")
+			.style("height", "auto")
 			.style("display", "inline-block");
+			
+			var opacScale = d3.scaleLinear().domain([75,80]).range([0,1]);
+			
+			svg.selectAll("path")
+			.attr("transform", "translate(-52,0)")
+			.style("stroke-width", "0.3px")
+			.style("fill", "rgb(230,230,230)");
 			
 			var svg2 = d3.select("body").append("svg")
 			.attr("id", "data")
@@ -529,6 +547,7 @@
 			var barScale = d3.scaleLinear().domain([0,0.3]).range([0,180]);
 			
 			function handleMouseEvents(data1,data2){
+				console.log(data1);
 				svg.selectAll("path")
 				.on("mouseover", function(d){
 					state = d3.select(this);
@@ -589,13 +608,10 @@
 							.duration(300)
 							.attr("x", baseX+barScale(deathsTot[i][1])+3)
 							.text(deathsTot[i] [0] + ": " + (deathsTot[i][1]*100).toFixed(2) + "%");
-							
-						
-						
 					}
 				})
 				.on("mouseout", function(d){
-					d3.select(this).style("fill", "#f9f9f9");
+					d3.select(this).style("fill", "rgb(230,230,230)");
 				});
 			}
 			
