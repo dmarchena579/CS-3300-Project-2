@@ -480,17 +480,15 @@
 					deathCauses = data2;
 					
 					svg.selectAll("path")
-					.style("fill", "#A93226")
+					.style("fill", "rgb(255,25,25)")
 					.style("opacity", function(d){
 						for(var i=0; i<data1.length; i++){
 							if(data1[i]["State"]==d3.select(this).attr("data-name")){
-								console.log(opacScale(data1[i]["Age"]));
 								return opacScale(data1[i]["Age"]);
 							}
 					}
-				})
+					});
 					handleMouseEvents(lifeExpectancy,deathCauses);
-          survey(lifeExpectancy,deathCauses);
 				});
 			});
 			
@@ -501,7 +499,7 @@
 			.style("height", "auto")
 			.style("display", "inline-block");
 			
-			var opacScale = d3.scaleLinear().domain([75,80]).range([0,1]);
+			var opacScale = d3.scaleLinear().domain([75,80]).range([0.4,1]);
 			
 			svg.selectAll("path")
 			.attr("transform", "translate(-52,0)")
@@ -548,12 +546,71 @@
 			var barScale = d3.scaleLinear().domain([0,0.3]).range([0,180]);
 			
 			function handleMouseEvents(data1,data2){
+			
+				var form = d3.select("body")
+				.append("form");
+
+				form.append("text")
+				.attr("x", baseX)
+				.attr("y", baseY)
+				.attr("font-size", 20)
+				.text("How will you die?");
+
+				form.append("br");
+
+				form.append("text")
+				.attr("x", baseX)
+				.attr("y", baseY + 25)
+				.attr("font-size", 20)
+				.text("I am currently a ");
+
+				form.append("input")
+				.attr("id", "myAge")
+				.attr("type", "text")
+				.attr("name", "age");
+
+				form.append("text")
+				.attr("x", baseX)
+				.attr("y", baseY + 25)
+				.attr("font-size", 20)
+				.text(" year old living in ");
+
+				var select = form.append("select")
+				.attr("id", "myState")
+				.attr("name", "state");
+
+				  select.selectAll("option")
+				  .data(data1)
+				  .enter()
+				  .append("option")
+				  .attr("value", function(d){
+					return d["State"];
+				  })
+				  .text(function(d){
+					return d["State"];
+				  });
+
+				var button = form.append("button")
+				.attr("type", "button")
+				.attr("id", "submit")
+				.text("Submit");
+
+				button.on("click", function() {
+					var inputAge = document.getElementById("myAge").value;
+					var inputState = document.getElementById("myState").value;
+					
+					console.log(inputAge+inputState);
+				
+				});
 				console.log(data1);
+				currOpac = null;
+				
 				svg.selectAll("path")
 				.on("mouseover", function(d){
 					state = d3.select(this);
-					state.style("fill", "#A93226")
-					.style("transition","fill 0.3s");
+					currOpac = state.style("opacity");
+					state.style("opacity", 1)
+					.style("transition","opacity 0.3s");
 					d3.select("#stateName")
 					.text(state.attr("data-name"));
 					d3.select("#expectancy")
@@ -612,66 +669,9 @@
 					}
 				})
 				.on("mouseout", function(d){
-					d3.select(this).style("fill", "rgb(230,230,230)");
+					d3.select(this).style("opacity", currOpac);
 				});
 			}
-
-      function survey(data1, data2){
-
-        var form = d3.select("body")
-        .append("form");
-
-        form.append("text")
-        .attr("x", baseX)
-        .attr("y", baseY)
-        .attr("font-size", 20)
-        .text("How will you die?");
-
-        form.append("br");
-
-        form.append("text")
-        .attr("x", baseX)
-        .attr("y", baseY + 25)
-        .attr("font-size", 20)
-        .text("I am currently a ");
-
-        form.append("input")
-        .attr("id", "myAge")
-        .attr("type", "text")
-        .attr("name", "age");
-
-        form.append("text")
-        .attr("x", baseX)
-        .attr("y", baseY + 25)
-        .attr("font-size", 20)
-        .text(" year old living in ");
-
-        var select = form.append("select")
-        .attr("id", "myState")
-        .attr("name", "state");
-
-          select.selectAll("option")
-          .data(data1)
-          .enter()
-          .append("option")
-          .attr("value", function(d){
-            return d["State"];
-          })
-          .text(function(d){
-            return d["State"];
-          });
-
-        var button = form.append("button")
-        .attr("type", "button")
-        .attr("id", "submit")
-        .text("Submit");
-
-        button.on("click", function() {
-          var inputAge = document.getElementById("myAge").value;
-          var inputState = document.getElementById("myState").value;
-          console.log(inputAge+inputState);
-        })
-      }
 			
 		</script>
 	</body>
