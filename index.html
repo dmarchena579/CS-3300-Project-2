@@ -44,12 +44,13 @@
 	}
 	#submit:hover{
 		background-color: #A93226;
+		color: white;
 		cursor: pointer;
 		transition: 0.2s;
 	}
   button {
     background-color: red;
-    border-radius: 20px;
+    border-radius: 10px;
     border: 2px solid #aaa;
   }
   button:active {
@@ -576,9 +577,11 @@
 			
 			var svg2 = d3.select("body").append("svg")
 			.attr("id", "data")
-			.attr("width", 500)
+			.attr("width", 550)
 			.attr("height", 500)
 			.attr("display", "inline-block")
+			.style("padding-top", 10);
+			
 			
 			
 			//Guide text for map interactive features:
@@ -632,10 +635,13 @@
 				.attr("font-size", 15)
 			}
 			
+			//Scale for bar graph
 			var barScale = d3.scaleLinear().domain([0,0.3]).range([0,350]);
 			
+			//All interactive functionality/event listeners
 			function handleMouseEvents(data1,data2){
 			
+				//Prediction form
 				var form = d3.select("body")
 				.insert("form", "svg");
 				
@@ -690,6 +696,7 @@
 				
 				var currFill = null;
 
+				//Submit button listener
 				button.on("click", function() {
 					colorFill(data1);
 					var inputAge = document.getElementById("myAge").value;
@@ -705,6 +712,7 @@
 					});
 					activateEvent(selectedState,inputAge);
 				});
+				//What to do on button press or state click
 				function activateEvent(selectedState,inputAge = null){
 					guide.style("display", "none");
 					state = selectedState;
@@ -778,6 +786,7 @@
 					}
 				}
 				
+				//State highlighting on mouseover of legend
 				svg.selectAll("rect")
 				.on("mouseover", function(d){
 					keyBlock = d3.select(this)
@@ -808,7 +817,7 @@
 						.attr("stroke", "black");
 					});
 				});
-				
+				//Mouseover highlighting and selection for states
 				svg.selectAll("path")
 				.on("mouseover",function(d){
 					state = d3.select(this);
