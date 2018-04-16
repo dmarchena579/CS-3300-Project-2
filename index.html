@@ -515,7 +515,8 @@
 				});
 			});
 			var opacScale = d3.scaleLinear().domain([75,80]).range([0.3,0.8]);
-
+			
+			//Fill states with color according to 
 			function colorFill(data1){
 				svg.selectAll("path")
 					.style("fill", function(d){
