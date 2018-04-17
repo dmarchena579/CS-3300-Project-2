@@ -716,8 +716,13 @@
 				function activateEvent(selectedState,inputAge = null){
 					guide.style("display", "none");
 					state = selectedState;
-					d3.select("#stateName")
-					.text(state.attr("data-name"));
+					if(inputAge==null){
+						d3.select("#stateName")
+						.text(state.attr("data-name"));}
+					else{
+						d3.select("#stateName")
+						.text("");
+					}
 					d3.select("#expectancy")
 					.text(function(){
 						for(var i=0; i< data1.length; i++){
